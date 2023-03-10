@@ -143,12 +143,14 @@ class MBRBlock(nn.Module):
         self.bn_list2 = nn.ModuleList(self.bn_list2)
 
     def forward(self,x):
-        bands = torch.chunk(x, self.num_of_band, dim = 1)
+        bands = list(torch.chunk(x, self.num_of_band, dim = 1))
         for i in range(len(bands)):
+            # print(bands[i].shape)
             t = self.activation(self.bn_list1[i](self.conv_list1[i](bands[i])))
             t = self.bn_list2[i](self.conv_list2[i](t))
-            bands[i] = torch.add(bands[i],1,t)
-        x = torch.add(x,1,torch.cat(bands, dim = 1))
+            bands[i] = torch.add(bands[i],t)
+        bands = tuple(bands)
+        x = torch.add(x,torch.cat(bands, dim = 1))
         return x 
      
 class PerformanceNet(nn.Module):

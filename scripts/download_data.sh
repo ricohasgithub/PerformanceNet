@@ -6,6 +6,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
 DST="${DIR}/../data"
 mkdir -p "$DST"
 
-wget -P "$DST" "https://homes.cs.washington.edu/~thickstn/media/musicnet.npz"
+wget -P "$DST" "https://zenodo.org/record/5120004/files/musicnet.tar.gz"
 
 

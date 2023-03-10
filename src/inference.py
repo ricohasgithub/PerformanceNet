@@ -9,6 +9,7 @@ import json
 import os
 from model import PerformanceNet
 import librosa
+import soundfile as sf
 from tqdm import tqdm
 import sys
 class AudioSynthesizer():
@@ -64,7 +65,7 @@ class AudioSynthesizer():
 
         for i in range(len(test_results)):
             audio = self.griffinlim(test_results[i], audio_id = i+1)
-            librosa.output.write_wav(os.path.join(output_dir,'output-{}.wav'.format(i+1)), audio, self.sample_rate)
+            sf.write(os.path.join(output_dir,'output-{}.wav'.format(i+1)), audio, self.sample_rate)
     
     def create_output_dir(self):
         success = False

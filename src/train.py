@@ -12,6 +12,7 @@ import os
 import json
 from model import PerformanceNet
 cuda = torch.device("cuda")
+cpu = torch.device('cpu')
 
 class hyperparams(object):
     def __init__(self):
@@ -42,9 +43,9 @@ def Process_Data(instr, exp_dir):
     np.save(os.path.join(test_data_dir, "test_X.npy"), X_test)
     np.save(os.path.join(test_data_dir, "test_Y.npy"), Y_test)    
     
-    train_dataset = utils.TensorDataset(torch.Tensor(X_train, device=cuda), torch.Tensor(Y_train, device=cuda))
+    train_dataset = utils.TensorDataset(torch.from_numpy(X_train).to(dtype=torch.float, device=cuda), torch.from_numpy(Y_train).to(dtype=torch.float, device=cuda))
     train_loader = utils.DataLoader(train_dataset, batch_size=16, shuffle=True)
-    test_dataset = utils.TensorDataset(torch.Tensor(X_test, device=cuda), torch.Tensor(Y_test,device=cuda))
+    test_dataset = utils.TensorDataset(torch.from_numpy(X_test).to(dtype=torch.float, device=cuda), torch.from_numpy(Y_test).to(dtype=torch.float, device=cuda))
     test_loader = utils.DataLoader(test_dataset, batch_size=16, shuffle=True) 
     
     return train_loader, test_loader

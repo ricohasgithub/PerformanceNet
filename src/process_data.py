@@ -1,5 +1,5 @@
 import numpy as np
-import librosa.output
+# import librosa.output
 import librosa
 from intervaltree import Interval,IntervalTree
 from scipy import fft 
@@ -34,17 +34,23 @@ def get_data():
         Process cello, violin, flute 
     
     '''
-    dataset = np.load(open('data/musicnet.npz','rb'), encoding = 'latin1')
+    dataset = np.load(open('data/musicnet.npz','rb'), encoding = 'latin1', allow_pickle = True)
     train_data = h5py.File('data/train_data.hdf5', 'w') 
 
     for inst in hp.instrument:
         print ('------ Processing ' + inst + ' ------')
         score = []
         audio = []
+        n_song = 0
         for song in hp.instrument[inst]: 
+            if inst == "flute" and n_song == 1:
+                break
+            if n_song == 3:
+                break
             a,b = dataset[str(song)] 
             score.append(a)
             audio.append(b)
+            n_song += 1
 
         spec_list, score_list, onoff_list = process_data(score,audio,inst)   
         train_data.create_dataset(inst + "_spec", data=spec_list)
